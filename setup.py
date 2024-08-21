@@ -14,8 +14,5 @@ setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
     ],
-    install_requires=[
-        'python>=3.10',
-        'asyncio',
-    ],
+    python_requires='>=3.10',
 )
