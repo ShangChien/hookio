@@ -8,6 +8,7 @@ setup(
     long_description_content_type="text/markdown",
     author='ShangChien',
     author_email='hi@emm.sh',
+    url='https://github.com/ShangChien/hookio',
     packages=find_packages(),  # 自动查找包
     classifiers=[
         'Programming Language :: Python :: 3',
