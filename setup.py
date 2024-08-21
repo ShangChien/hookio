@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='hookio',  # 包的名称
-    version='0.0.3',          # 版本号
+    version='0.0.4',          # 版本号
     description='the coding style of hook',
     long_description=open('README.md').read(),  # 长描述
     long_description_content_type="text/markdown",
