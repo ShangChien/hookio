@@ -9,7 +9,7 @@
 
 ## usage:
 
-### 1. define `async` lifespan functions, run flow with `await flow.run()`（**Highly recommended**）:
+### 1. （**Highly recommended**）define `async` lifespan functions, run flow with `await flow.run()`:
 
 ```python
 from hookio import FuncArgs,Context,Flow
@@ -87,7 +87,7 @@ flow=Flow[dict](
     on_error=FuncArgs(on_error,('red',))
 )
 
-await flow.run()
+flow.safe_run()
 
 # start: time:0; 
 # start: context:Context(data={}, info={}) after 2s
@@ -131,7 +131,7 @@ flow=Flow[dict](
     on_error=FuncArgs(on_error,('red',))
 )
 
-await flow.run()
+flow.safe_run()
 
 # start: time:0; 
 # start: context:Context(data={}, info={}) after 2s
