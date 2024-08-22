@@ -9,7 +9,7 @@
 
 ## usage:
 
-### 1. （**Highly recommended**）define `async` lifespan functions, run flow with `await flow.run()`:
+### 1. (**Highly recommended**) define `async` lifespan functions, run flow with `await flow.run()`:
 
 ```python
 from hookio import FuncArgs,Context,Flow
