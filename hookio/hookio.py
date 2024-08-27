@@ -22,7 +22,14 @@ class Flow(Generic[T]):
     def __post_init__(self):
         for i in self.hooks:
             setattr(self.inner_hooks, i.__name__, i)
+
     
+    def cleanup(self):
+        # Reset or delete attributes
+        self.ctx = {}  # Set to None or reset to initial state
+        self.hooks.clear()  # Clear list of hooks if necessary
+        self.inner_hooks = Hooks()  # Deallocate inner hooks
+        self.logic = None
 
     async def run(self):
         # 如果用户有自定义逻辑则执行自定义逻辑，否则顺序执行hooks
@@ -117,8 +124,8 @@ class Flow(Generic[T]):
         
 if __name__ =='__main__':
 
-    #定义类型
-    class MyHook(Hooks):
+    # Define Hook type
+    class MyHook:
         hook_one:Callable
         hook_two:Callable
     
@@ -129,25 +136,35 @@ if __name__ =='__main__':
 
     # Define some hooks
     async def hook_one(ctx:MyCtx):
-        print("Executing Hook One")
+        print(f"start Hook One: ctx.state is {ctx.state}")
         ctx.state = "Completed"
         ctx.state_list.append({'hook1':ctx.state})
+        print(f"leave Hook One: {ctx.state_list}")
 
     def hook_two(ctx:MyCtx):
-        print("Executing Hook Two")
-        ctx.state = "Completed"
+        print(f"start Hook Two: ctx.state is {ctx.state}")
+        ctx.state = "error"
         ctx.state_list.append({'hook2':ctx.state})
-        print(ctx)
+        print(f"leave Hook Two: {ctx.state_list}")
     
+    # Define main_logic
     async def main_function(hooks:MyHook,ctx:MyCtx):
-        print("Executing Main Function")
+        print(f"Executing Main Function:{ctx.state}")
+        ## access ctx in main logic
+        ctx.state='main_start'
         await hooks.hook_one(ctx)
         hooks.hook_two(ctx)
         print("Main Function Completed")
 
     # Create a Flow instance
-    flow = Flow(hooks=[hook_one, hook_two],logic=main_function,ctx=MyCtx(state='',state_list=[]))
+    flow = Flow(
+        hooks=[hook_one, hook_two],
+        logic=main_function,
+        ctx=MyCtx(state='init', state_list=[])
+    )
 
     # Run the flow
-    flow.safe_run()
-    print(flow.ctx)
+    asyncio.run(flow.run())
+    print(f'flow finished and before cleanup: {flow.ctx}')
+    flow.cleanup()
+    print(f'after cleanup: {flow.ctx}')
